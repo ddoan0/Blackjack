@@ -1,0 +1,8 @@
+﻿  Blackjackgame.cpp
+  Card.cpp
+  Deck.cpp
+  Blackjack.cpp
+  Player.cpp
+  Generating Code...
+  .NETFramework,Version=v4.6.1.AssemblyAttributes.cpp
+LINK : fatal error LNK1561: entry point must be defined
