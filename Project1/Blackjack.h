@@ -60,12 +60,16 @@ namespace Project1 {
 	private: System::Windows::Forms::Button^  button3;
 	private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 
+	private: System::ComponentModel::IContainer^  components;
+
+
+
 
 	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -92,7 +96,7 @@ namespace Project1 {
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->button2 = (gcnew System::Windows::Forms::Button());
-			this->button3 = (gcnew System::Windows::Forms::Button());			
+			this->button3 = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->BeginInit();
@@ -241,7 +245,7 @@ namespace Project1 {
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(92, 22);
 			this->exitToolStripMenuItem->Text = L"Exit";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::exitToolStripMenuItem_Click);
 			// 
@@ -250,6 +254,7 @@ namespace Project1 {
 			this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
 			this->helpToolStripMenuItem->Size = System::Drawing::Size(44, 20);
 			this->helpToolStripMenuItem->Text = L"Help";
+			this->helpToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::helpToolStripMenuItem_Click);
 			// 
 			// button2
 			// 
@@ -329,6 +334,10 @@ private: System::Void pictureBox1_Click(System::Object^  sender, System::EventAr
 }
 private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		Application::Exit();
+}
+private: System::Void helpToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		MessageBox::Show("The goal of the game is to get a hand value of 21 to win the game and not lose bet money. Refer to the following steps:\n1. Set the bet amount; it must be >0\n2. The dealer will deal two cards\n3. Decide to stick with what you have or press the 'hit' button to add a card to your hand\n4. Your turn will end when you click 'stay'\n5. If you have a lower hand or have a hand that goes over 21, you lose the game and the bet money", 
+						  "How to play");
 }
 };
 }
