@@ -214,6 +214,7 @@
     <Image Include="images\9.png" />
     <Image Include="images\99.png" />
     <Image Include="images\back.png" />
+    <Image Include="images\blank.PNG" />
     <Image Include="images\smallback.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

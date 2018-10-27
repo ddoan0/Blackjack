@@ -19,24 +19,26 @@ Deck::Deck()
 *	 39-51 Hearts		49-51 face cards
 */
 	int cardName = 1;
-	for (int i = 0, j = 1; i < deckSize; i++, j++)
+	int count = 0;
+	int j = 1; // value of the cards
+	// count to reset for face cards
+	int suitCount = 0;
+
+	for (int i = 0; i < deckSize; i++)
 	{
-		// count to reset for face cards
-		int count = 0;
-		int suitCount = 0;
-		
 		// aCardValue to be only used for Aces
 		deck[i] = gcnew Card();
 		deck[i]->aCardValue = 11;
-		deck[i]->cardValue = j;
-		// need to change the path to a relative path in final build
+		deck[i]->cardValue = j++;
+		
 		deck[i]->img_loc = "images\\" + cardName +".png";
 		cardName++;
 
-		if (j == 10) // when j = 10, let the value persist until all face cards are accounted for
+		if (j >= 10) // when j = 10, let the value persist until all face cards are accounted for
 		{
+			j = 10;
 			count++;
-			if (count == 4) // when count reaches 4, all face cards for that suit has been assigned a value of 10
+			if (count > 4) // when count reaches 5, all face cards for that suit has been assigned a value of 10
 			{
 				j = 1;
 				count = 0;
@@ -45,7 +47,11 @@ Deck::Deck()
 
 		// set suits. if index is multiple of 13, change suit
 		deck[i]->suit = suitsTotal[suitCount];
-		if (i % 13 == 0) suitCount++;
+		if (i == 12 || i == 25 || i == 38) // end of one set of suits
+		{
+			suitCount++;
+			j = 1;
+		}
 	}
 }
 
@@ -57,4 +63,11 @@ void Deck::shuffle()
 void Deck::populate()
 {
 	
+}
+
+// pass in pindex and pindex2 of the cards to determine whether the first two cards are Aces.
+bool Deck::cardHasBeenDrawn(int index)
+{
+	if (deck[index]->hasBeenUsed) return true;
+	return false;
 }

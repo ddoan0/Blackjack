@@ -7,6 +7,7 @@ public:
 	Deck();
 	void shuffle();
 	void populate();
+	bool cardHasBeenDrawn(int);
 
 public:
 	int deckSize;
