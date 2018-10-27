@@ -555,38 +555,43 @@ private: System::Void button4_Click(System::Object^  sender, System::EventArgs^ 
  // HIT BUTTON
 private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) 
 {
+	// TODO: MAKE SURE ACES DECREMENT AND INCREMENT PROPERLY
+
 	// Give player one card into first slot
+	// i will be 0 if the player just started a game
 	if (i == 0 && playerTotal < 21) 
 	{
-		int pindex = rand() % 52;
-		while (bjg->d->deck[pindex]->hasBeenUsed)
+		int pindex3 = rand() % 52;
+		while (bjg->d->deck[pindex3]->hasBeenUsed)
 		{
-			pindex = rand() % 52;
+			pindex3 = rand() % 52;
 		}
-		bjg->d->deck[pindex]->hasBeenUsed = true;
+		bjg->d->deck[pindex3]->hasBeenUsed = true;
 		// if it is an ace it needs to have its value checked
-		if (pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39)
+		if (pindex3 == 0 || pindex3 == 13 || pindex3 == 26 || pindex3 == 39)
 		{
 			if (playerTotal + 11 > 21) { playerTotal += 1; }
 			else { playerTotal += 11; }
 		}
-		else { playerTotal += bjg->d->deck[pindex]->cardValue; }
+		else { playerTotal += bjg->d->deck[pindex3]->cardValue; }
 
 		// Also need to check to see if any previous ace values will bust
 		// ace is in first position
-		if (bjg->d->cardHasBeenDrawn(pindex))
+		if (bjg->d->cardHasBeenDrawn(pindex) && (pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39))
 		{
 			if (playerTotal + 11 > 21) {
 				playerTotal-=10; 
 			}
 		}
-		else if (bjg->d->cardHasBeenDrawn(pindex2)) // POSITION 2 IS AN ACE
+		else if (bjg->d->cardHasBeenDrawn(pindex2) && (pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39)) // POSITION 2 IS AN ACE
 		{
 			if (playerTotal + 11 > 21) {
 				playerTotal -= 10;
 			}
 		}
-		else // BOTH ARE ACES
+		else if(bjg->d->cardHasBeenDrawn(pindex) && bjg->d->cardHasBeenDrawn(pindex2) && 
+			(pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39) &&
+			(pindex2 == 0 || pindex2 == 13 || pindex2 == 26 || pindex2 == 39)) // BOTH ARE ACES
 		{
 			if (playerTotal + 11 > 21) {
 				playerTotal -= 10;
@@ -597,47 +602,43 @@ private: System::Void button2_Click(System::Object^  sender, System::EventArgs^ 
 		}
 		
 		// update pictures for player pictureBox 
-		pictureBox5->ImageLocation = bjg->d->deck[pindex]->img_loc;
+		pictureBox5->ImageLocation = bjg->d->deck[pindex3]->img_loc;
 		// show player total
 		label8->Text = playerTotal.ToString();
 		i++; // this will move to the next picturebox next time the player hits
 	}
 	else if(i == 1 && playerTotal < 21)
 	{
-		int pindex2 = rand() % 52;
-		while (bjg->d->deck[pindex2]->hasBeenUsed)
+		int pindex4 = rand() % 52;
+		while (bjg->d->deck[pindex4]->hasBeenUsed)
 		{
-			pindex2 = rand() % 52;
+			pindex4 = rand() % 52;
 		}
-		bjg->d->deck[pindex2]->hasBeenUsed = true;
-		if (pindex2 == 0 || pindex2 == 13 || pindex2 == 26 || pindex2 == 39)
+		bjg->d->deck[pindex4]->hasBeenUsed = true;
+		if (pindex4 == 0 || pindex4 == 13 || pindex4 == 26 || pindex4 == 39)
 		{
 			if (playerTotal + 11 > 21) { playerTotal += 1; }
 			else { playerTotal += 11; }
 		}
-		else { playerTotal += bjg->d->deck[pindex2]->cardValue; }
+		else { playerTotal += bjg->d->deck[pindex4]->cardValue; }
 
 		// Also need to check to see if any previous ace values will bust
 		// ace is in first position
-		if (bjg->d->cardHasBeenDrawn(pindex))
+		if (bjg->d->cardHasBeenDrawn(pindex) && (pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39))
 		{
 			if (playerTotal + 11 > 21) {
 				playerTotal -= 10;
 			}
 		}
-		else if (bjg->d->cardHasBeenDrawn(pindex2)) // POSITION 2 IS AN ACE
+		else if (bjg->d->cardHasBeenDrawn(pindex2) && (pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39)) // POSITION 2 IS AN ACE
 		{
 			if (playerTotal + 11 > 21) {
 				playerTotal -= 10;
 			}
 		}
-		else if (bjg->d->cardHasBeenDrawn(pindex3)) // POSITION 3 IS AN ACE
-		{
-			if (playerTotal + 11 > 21) {
-				playerTotal -= 10;
-			}
-		}
-		else // BOTH ARE ACES
+		else if (bjg->d->cardHasBeenDrawn(pindex) && bjg->d->cardHasBeenDrawn(pindex2) &&
+			(pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39) &&
+			(pindex2 == 0 || pindex2 == 13 || pindex2 == 26 || pindex2 == 39)) // BOTH ARE ACES
 		{
 			if (playerTotal + 11 > 21) {
 				playerTotal -= 10;
@@ -648,7 +649,7 @@ private: System::Void button2_Click(System::Object^  sender, System::EventArgs^ 
 		}
 
 		// update pictures for player pictureBox 
-		pictureBox6->ImageLocation = bjg->d->deck[pindex2]->img_loc;
+		pictureBox6->ImageLocation = bjg->d->deck[pindex4]->img_loc;
 		// show player total
 		label8->Text = playerTotal.ToString();
 		i = 0; // go back to the first piturebox for next round
@@ -659,7 +660,6 @@ private: System::Void button2_Click(System::Object^  sender, System::EventArgs^ 
  // STAY BUTTON
 private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) 
 {
-	// TODO: MAKE SURE DEALER'S CARDS ARE CHECKED FOR ACES
 	// Draw a card for the dealer
 	dindex2 = rand() % 52;
 	while (bjg->d->deck[dindex2]->hasBeenUsed)
@@ -668,12 +668,16 @@ private: System::Void button3_Click(System::Object^  sender, System::EventArgs^ 
 	}
 	bjg->d->deck[dindex2]->hasBeenUsed = true;
 	dealerTotal += bjg->d->deck[dindex2]->cardValue;
+
+	// TODO: check if there is an ace in the first and second position
+	
 	label12->Text = dealerTotal.ToString();
 	// picture box 2 and 4 for dealer
 	pictureBox4->ImageLocation = bjg->d->deck[dindex2]->img_loc;
 
 	if (dealerTotal < 17) // deal again if dealer has less than a 17
 	{
+		
 		// Draw a card for the dealer
 		int dindex3 = rand() % 52;
 		while (bjg->d->deck[dindex3]->hasBeenUsed)
@@ -682,12 +686,16 @@ private: System::Void button3_Click(System::Object^  sender, System::EventArgs^ 
 		}
 		bjg->d->deck[dindex3]->hasBeenUsed = true;
 		dealerTotal += bjg->d->deck[dindex3]->cardValue;
+		
+		// TODO: check in 1st, 2nd, 3rd position for an ace
+
 		label12->Text = dealerTotal.ToString();
 		// picture box 2 and 4 for dealer
 		pictureBox7->ImageLocation = bjg->d->deck[dindex3]->img_loc;
 	}
 	if (dealerTotal < 17) // last card for the dealer
 	{
+		
 		// Draw a card for the dealer
 		int dindex4 = rand() % 52;
 		while (bjg->d->deck[dindex4]->hasBeenUsed)
@@ -696,6 +704,9 @@ private: System::Void button3_Click(System::Object^  sender, System::EventArgs^ 
 		}
 		bjg->d->deck[dindex4]->hasBeenUsed = true;
 		dealerTotal += bjg->d->deck[dindex4]->cardValue;
+
+		// TODO: Check for ace in fourth position too
+
 		label12->Text = dealerTotal.ToString();
 		// picture box 2 and 4 for dealer
 		pictureBox8->ImageLocation = bjg->d->deck[dindex4]->img_loc;
