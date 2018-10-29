@@ -54,6 +54,8 @@ namespace Project1 {
 			 int dindex2;
 			 int dindex3;
 			 int dindex4;
+			 int numOfAces = 0;
+			 int dnumOfAces = 0;
 	private: System::Windows::Forms::TextBox^  textBox1;
 	private: System::Windows::Forms::Label^  label2;
 	private: System::Windows::Forms::Label^  label3;
@@ -454,8 +456,7 @@ namespace Project1 {
 		label2->Text = bjg->totalBetAmount.ToString(); // display the total
 		label4->Text = bjg->p->money.ToString();
 
-		/*Setting an imagelocation to change the picture*/
-		//pictureBox3->ImageLocation = "images\\smallback.png";
+		
 	} // bet button
 	
 
@@ -485,6 +486,7 @@ private: System::Void button4_Click(System::Object^  sender, System::EventArgs^ 
 	// RESET playerTotal card value
 	bjg->p->money = 250; playerTotal = 0; dealerTotal = 0;
 	bjg->totalBetAmount = 0; label2->Text = "0";
+	numOfAces = 0; dnumOfAces = 0;
 	pictureBox4->ImageLocation = "images\\smallback.png";
 	pictureBox5->ImageLocation = "images\\blank.png";
 	pictureBox6->ImageLocation = "images\\blank.png";
@@ -498,11 +500,12 @@ private: System::Void button4_Click(System::Object^  sender, System::EventArgs^ 
 		pindex = rand() % 52;
 	}
 	bjg->d->deck[pindex]->hasBeenUsed = true;
-	// check to see if having Ace = 11 will cause player to bust
+	// check to see if it is an ACE
 	if (pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39)
 	{
 		if (playerTotal + 11 > 21) { playerTotal += 1; }
 		else { playerTotal += 11; }
+		numOfAces++;
 	}
 	else { playerTotal += bjg->d->deck[pindex]->cardValue; }
 	// update pictures for player (picturebox 1 and 3)
@@ -514,14 +517,18 @@ private: System::Void button4_Click(System::Object^  sender, System::EventArgs^ 
 		pindex2 = rand() % 52;
 	}
 	bjg->d->deck[pindex2]->hasBeenUsed = true;
-	// check to see if having Ace = 11 will cause player to bust
+	// check to see if it is an ACE 
 	if (pindex2 == 0 || pindex2 == 13 || pindex2 == 26 || pindex2 == 39)
 	{
 		if (playerTotal + 11 > 21) { playerTotal += 1; }
 		else { playerTotal += 11; }
+		numOfAces++;
 	}
 	else { playerTotal += bjg->d->deck[pindex2]->cardValue; }
 	pictureBox3->ImageLocation = bjg->d->deck[pindex2]->img_loc;
+
+	// show player total
+	label8->Text = playerTotal.ToString();
 
 	// Draw a card for the dealer
 	int dindex = rand() % 52;
@@ -530,13 +537,15 @@ private: System::Void button4_Click(System::Object^  sender, System::EventArgs^ 
 		dindex = rand() % 52;
 	}
 	bjg->d->deck[dindex]->hasBeenUsed = true;
-	dealerTotal += bjg->d->deck[dindex]->cardValue;
+	if (dindex == 0 || dindex == 13 || dindex == 26 || dindex == 39)
+	{
+		if (dealerTotal + 11 > 21) { dealerTotal += 1; }
+		else { dealerTotal += 11; }
+		dnumOfAces++;
+	}
 	label12->Text = dealerTotal.ToString();
 	// picture box 2 and 4 for dealer
 	pictureBox2->ImageLocation = bjg->d->deck[dindex]->img_loc;
-
-	// show player total
-	label8->Text = playerTotal.ToString();
 
 	// TODO: When getting blackjack on first draw, payout to the player
 
@@ -555,8 +564,6 @@ private: System::Void button4_Click(System::Object^  sender, System::EventArgs^ 
  // HIT BUTTON
 private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) 
 {
-	// TODO: MAKE SURE ACES DECREMENT AND INCREMENT PROPERLY
-
 	// Give player one card into first slot
 	// i will be 0 if the player just started a game
 	if (i == 0 && playerTotal < 21) 
@@ -572,34 +579,9 @@ private: System::Void button2_Click(System::Object^  sender, System::EventArgs^ 
 		{
 			if (playerTotal + 11 > 21) { playerTotal += 1; }
 			else { playerTotal += 11; }
+			numOfAces++;
 		}
 		else { playerTotal += bjg->d->deck[pindex3]->cardValue; }
-
-		// Also need to check to see if any previous ace values will bust
-		// ace is in first position
-		if (bjg->d->cardHasBeenDrawn(pindex) && (pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39))
-		{
-			if (playerTotal + 11 > 21) {
-				playerTotal-=10; 
-			}
-		}
-		else if (bjg->d->cardHasBeenDrawn(pindex2) && (pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39)) // POSITION 2 IS AN ACE
-		{
-			if (playerTotal + 11 > 21) {
-				playerTotal -= 10;
-			}
-		}
-		else if(bjg->d->cardHasBeenDrawn(pindex) && bjg->d->cardHasBeenDrawn(pindex2) && 
-			(pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39) &&
-			(pindex2 == 0 || pindex2 == 13 || pindex2 == 26 || pindex2 == 39)) // BOTH ARE ACES
-		{
-			if (playerTotal + 11 > 21) {
-				playerTotal -= 10;
-			}
-			if (playerTotal + 11 > 21) {
-				playerTotal -= 10;
-			}
-		}
 		
 		// update pictures for player pictureBox 
 		pictureBox5->ImageLocation = bjg->d->deck[pindex3]->img_loc;
@@ -619,34 +601,9 @@ private: System::Void button2_Click(System::Object^  sender, System::EventArgs^ 
 		{
 			if (playerTotal + 11 > 21) { playerTotal += 1; }
 			else { playerTotal += 11; }
+			numOfAces++;
 		}
 		else { playerTotal += bjg->d->deck[pindex4]->cardValue; }
-
-		// Also need to check to see if any previous ace values will bust
-		// ace is in first position
-		if (bjg->d->cardHasBeenDrawn(pindex) && (pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39))
-		{
-			if (playerTotal + 11 > 21) {
-				playerTotal -= 10;
-			}
-		}
-		else if (bjg->d->cardHasBeenDrawn(pindex2) && (pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39)) // POSITION 2 IS AN ACE
-		{
-			if (playerTotal + 11 > 21) {
-				playerTotal -= 10;
-			}
-		}
-		else if (bjg->d->cardHasBeenDrawn(pindex) && bjg->d->cardHasBeenDrawn(pindex2) &&
-			(pindex == 0 || pindex == 13 || pindex == 26 || pindex == 39) &&
-			(pindex2 == 0 || pindex2 == 13 || pindex2 == 26 || pindex2 == 39)) // BOTH ARE ACES
-		{
-			if (playerTotal + 11 > 21) {
-				playerTotal -= 10;
-			}
-			if (playerTotal + 11 > 21) {
-				playerTotal -= 10;
-			}
-		}
 
 		// update pictures for player pictureBox 
 		pictureBox6->ImageLocation = bjg->d->deck[pindex4]->img_loc;
@@ -654,7 +611,12 @@ private: System::Void button2_Click(System::Object^  sender, System::EventArgs^ 
 		label8->Text = playerTotal.ToString();
 		i = 0; // go back to the first piturebox for next round
 	}
-
+	// check if there were any aces and if the player has busted. if the player busts, use the value of 1 for Aces
+	while (numOfAces > 0 && playerTotal > 21)
+	{
+		numOfAces--;
+		playerTotal -= 10;
+	}
 }// HIT BUTTON
 
  // STAY BUTTON
@@ -667,13 +629,24 @@ private: System::Void button3_Click(System::Object^  sender, System::EventArgs^ 
 		dindex2 = rand() % 52;
 	}
 	bjg->d->deck[dindex2]->hasBeenUsed = true;
-	dealerTotal += bjg->d->deck[dindex2]->cardValue;
-
-	// TODO: check if there is an ace in the first and second position
+	// Check for aces
+	if (dindex2 == 0 || dindex2 == 13 || dindex2 == 26 || dindex2 == 39)
+	{
+		if (dealerTotal + 11 > 21) { dealerTotal += 1; }
+		else { dealerTotal += 11; }
+		dnumOfAces++;
+	}
+	else { dealerTotal += bjg->d->deck[dindex2]->cardValue; }
 	
 	label12->Text = dealerTotal.ToString();
 	// picture box 2 and 4 for dealer
 	pictureBox4->ImageLocation = bjg->d->deck[dindex2]->img_loc;
+
+	while (dnumOfAces > 0 && dealerTotal > 21)
+	{
+		dnumOfAces--;
+		dealerTotal -= 10;
+	}
 
 	if (dealerTotal < 17) // deal again if dealer has less than a 17
 	{
@@ -685,13 +658,24 @@ private: System::Void button3_Click(System::Object^  sender, System::EventArgs^ 
 			dindex3 = rand() % 52;
 		}
 		bjg->d->deck[dindex3]->hasBeenUsed = true;
-		dealerTotal += bjg->d->deck[dindex3]->cardValue;
+		// check for aces
+		if (dindex3 == 0 || dindex3 == 13 || dindex3 == 26 || dindex3 == 39)
+		{
+			if (dealerTotal + 11 > 21) { dealerTotal += 1; }
+			else { dealerTotal += 11; }
+			dnumOfAces++;
+		}
+		else { dealerTotal += bjg->d->deck[dindex3]->cardValue; }
 		
-		// TODO: check in 1st, 2nd, 3rd position for an ace
-
 		label12->Text = dealerTotal.ToString();
 		// picture box 2 and 4 for dealer
 		pictureBox7->ImageLocation = bjg->d->deck[dindex3]->img_loc;
+
+		while (dnumOfAces > 0 && dealerTotal > 21)
+		{
+			dnumOfAces--;
+			dealerTotal -= 10;
+		}
 	}
 	if (dealerTotal < 17) // last card for the dealer
 	{
@@ -703,9 +687,20 @@ private: System::Void button3_Click(System::Object^  sender, System::EventArgs^ 
 			dindex4 = rand() % 52;
 		}
 		bjg->d->deck[dindex4]->hasBeenUsed = true;
-		dealerTotal += bjg->d->deck[dindex4]->cardValue;
+		// check for aces
+		if (dindex4 == 0 || dindex4 == 13 || dindex4 == 26 || dindex4 == 39)
+		{
+			if (dealerTotal + 11 > 21) { dealerTotal += 1; }
+			else { dealerTotal += 11; }
+			dnumOfAces++;
+		}
+		else { dealerTotal += bjg->d->deck[dindex4]->cardValue; }
 
-		// TODO: Check for ace in fourth position too
+		while (dnumOfAces > 0 && dealerTotal > 21)
+		{
+			dnumOfAces--;
+			dealerTotal -= 10;
+		}
 
 		label12->Text = dealerTotal.ToString();
 		// picture box 2 and 4 for dealer
